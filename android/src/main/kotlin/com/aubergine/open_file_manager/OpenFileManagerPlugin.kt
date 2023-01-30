@@ -38,9 +38,12 @@ class OpenFileManagerPlugin : FlutterPlugin, MethodCallHandler {
 
     private fun openFileManager(result: Result) {
         try {
-            val downloadIntent = Intent(DownloadManager.ACTION_VIEW_DOWNLOADS)
-            downloadIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            context.startActivity(downloadIntent)
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "*/*"
+            }
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(intent)
             result.success(true)
         } catch (e: Exception) {
             result.error("$e", "Unable to open the file manager", "")
